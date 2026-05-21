@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enaful Pro Hosting | গড লেভেল কন্ট্রোল</title>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; background: #0f172a; color: white; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        .card { background: #1e293b; padding: 2rem; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.3); text-align: center; width: 90%; max-width: 400px; }
+        h1 { color: #38bdf8; margin-bottom: 1rem; }
+        input { width: 100%; padding: 12px; margin: 10px 0; border-radius: 8px; border: none; box-sizing: border-box; }
+        button { width: 100%; padding: 12px; background: #38bdf8; border: none; border-radius: 8px; color: white; font-weight: bold; cursor: pointer; transition: 0.3s; }
+        button:hover { background: #0284c7; }
+        .status { margin-top: 15px; font-size: 0.9rem; }
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <h1>Enaful Hosting</h1>
+    <p>আপনার গিটহাব লিঙ্কটি নিচে দিন এবং বট লাইভ করুন।</p>
+    <form id="botForm">
+        <input type="text" id="repoUrl" placeholder="GitHub Repository URL" required>
+        <button type="submit" id="deployBtn">Deploy Now</button>
+    </form>
+    <div id="status" class="status"></div>
+</div>
+
+<script>
+    document.getElementById('botForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const repoUrl = document.getElementById('repoUrl').value;
+        const statusDiv = document.getElementById('status');
+        const btn = document.getElementById('deployBtn');
+
+        btn.innerText = "ডিপ্লয় হচ্ছে...";
+        btn.disabled = true;
+
+        try {
+            const res = await fetch('https://messenger-boom-enaful-1.onrender.com/deploy', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ repoUrl })
+            });
+
+            if (res.ok) {
+                statusDiv.innerHTML = "<span style='color: #4ade80;'>✅ বট সফলভাবে ডিপ্লয় হয়েছে!</span>";
+            } else {
+                statusDiv.innerHTML = "<span style='color: #f87171;'>❌ ডিপ্লয়মেন্ট ব্যর্থ হয়েছে!</span>";
+            }
+        } catch (err) {
+            statusDiv.innerHTML = "<span style='color: #f87171;'>⚠️ সার্ভার কানেকশন এরর!</span>";
+        }
+        btn.innerText = "Deploy Now";
+        btn.disabled = false;
+    });
+</script>
+
+</body>
+</html>
