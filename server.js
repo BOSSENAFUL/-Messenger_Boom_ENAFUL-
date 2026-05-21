@@ -1,10 +1,13 @@
 const express = require('express');
+const cors = require('cors'); // CORS সাপোর্ট যোগ করা হয়েছে
 const { exec } = require('child_process');
 const path = require('path');
 const app = express();
 
+// Middleware
+app.use(cors()); // যেকোনো ডোমেইন থেকে রিকোয়েস্ট এলাও করার জন্য
 app.use(express.json());
-app.use(express.static(path.join(__dirname))); // যাতে HTML ফাইলটি কাজ করে
+app.use(express.static(path.join(__dirname))); // স্ট্যাটিক ফাইল বা index.html দেখানোর জন্য
 
 // হোমপেজ লোড করার জন্য
 app.get('/', (req, res) => {
@@ -18,7 +21,7 @@ app.post('/deploy', (req, res) => {
 
     console.log(`Deploying from: ${repoUrl}`);
     
-    // নিরাপত্তার জন্য 'rm -rf' দিয়ে আগে পুরনো ফোল্ডার পরিষ্কার করে নেওয়া হচ্ছে
+    // ডিপ্লয়মেন্ট লজিক
     exec(`mkdir -p ./bots && rm -rf ./bots/user_bot && git clone ${repoUrl} ./bots/user_bot`, (err, stdout, stderr) => {
         if (err) {
             console.error(err);
@@ -29,4 +32,4 @@ app.post('/deploy', (req, res) => {
 });
 
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+app.listen(PORT, () => console.log(`Hosting Server running on port ${PORT}`));
