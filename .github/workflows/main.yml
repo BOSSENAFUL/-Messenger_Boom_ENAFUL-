@@ -1,0 +1,11 @@
+name: Deploy Bot
+on: [push]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Run Bot
+        run: |
+          npm install
+          node index.js
